@@ -11,6 +11,8 @@ extern SAI_HandleTypeDef BT_SAI;
 #define BT_RX_DATA_SIZE 32
 #define BT_TX_DATA_SIZE 128
 
+//#define BT_DATA_16BIT
+
 
 #ifdef BT_DATA_16BIT
 uint16_t BT_RX_Data[BT_RX_DATA_SIZE];
@@ -112,7 +114,7 @@ void BTAUDIO_RX_HalfTransfer_CallBack(void)
 		for(i=0;i<BT_RX_DATA_SIZE/2;i++,BT_PNT++)
 		{
 			if(BT_PNT >= BT_TX_DATA_SIZE) BT_PNT = 0;
-			BT_TX_Data[BT_PNT] = BT_RX_Data[i];
+			BT_TX_Data[BT_PNT] = BT_RX_Data[i] << 16;
 		}
 		#endif
 	}

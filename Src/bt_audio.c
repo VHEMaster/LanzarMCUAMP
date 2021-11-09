@@ -19,7 +19,7 @@ uint16_t BT_RX_Data[BT_RX_DATA_SIZE];
 #else
 uint32_t BT_RX_Data[BT_RX_DATA_SIZE];
 #endif
-uint32_t BT_TX_Data[BT_TX_DATA_SIZE];
+uint16_t BT_TX_Data[BT_TX_DATA_SIZE];
 
 
 #define I2S_THRESHOLD_MIN_44k 315
@@ -108,7 +108,7 @@ void BTAUDIO_RX_HalfTransfer_CallBack(void)
 		for(i=0;i<BT_RX_DATA_SIZE/2;i++,BT_PNT++)
 		{
 			if(BT_PNT >= BT_TX_DATA_SIZE) BT_PNT = 0;
-			BT_TX_Data[BT_PNT] = BT_RX_Data[i];
+			BT_TX_Data[BT_PNT] = BT_RX_Data[i] >> 16;
 		}
 		#else
 		for(i=0;i<BT_RX_DATA_SIZE/2;i++,BT_PNT++)
@@ -155,7 +155,7 @@ void BTAUDIO_RX_TransferComplete_CallBack(void)
 		for(i=BT_RX_DATA_SIZE/2;i<BT_RX_DATA_SIZE;i++,BT_PNT++)
 		{
 			if(BT_PNT >= BT_TX_DATA_SIZE) BT_PNT = 0;
-			BT_TX_Data[BT_PNT] = BT_RX_Data[i];
+			BT_TX_Data[BT_PNT] = BT_RX_Data[i] >> 16;
 		}
 		#else
 		for(i=BT_RX_DATA_SIZE/2;i<BT_RX_DATA_SIZE;i++,BT_PNT++)

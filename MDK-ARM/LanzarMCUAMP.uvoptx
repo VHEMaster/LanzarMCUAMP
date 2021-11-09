@@ -192,8 +192,8 @@
       <MemoryWindow1>
         <Mm>
           <WinNumber>1</WinNumber>
-          <SubType>4</SubType>
-          <ItemText>\\LanzarMCUAMP\../Src/main.c\hi2s1.hdmatx-&gt;Instance-&gt;M0AR</ItemText>
+          <SubType>9</SubType>
+          <ItemText>BT_TX_Data</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow1>

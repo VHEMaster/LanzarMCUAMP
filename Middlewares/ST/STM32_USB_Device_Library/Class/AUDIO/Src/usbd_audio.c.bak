@@ -408,7 +408,7 @@ __ALIGN_BEGIN static uint8_t USBD_AUDIO_CfgDesc[USB_AUDIO_CONFIG_DESC_SIZ] __ALI
   0x01,                                 /* bFormatType */
   0x02,                                 /* bNrChannels */
   0x04,                                 /* bSubFrameSize */
-  0x20z,                                 /* bBitResolution */
+  0x20,                                 /* bBitResolution */
   0x01,                                 /* bSamFreqType */
   AUDIO_SAMPLE_FREQ(USBD_AUDIO_FREQ),   /* tSamFreq */        
   /* 11 byte*/
@@ -502,7 +502,7 @@ static uint8_t  USBD_AUDIO_Init (USBD_HandleTypeDef *pdev,
     haudio->wr_ptr = 0;
     haudio->rd_ptr = 0;
     haudio->freq = USBD_AUDIO_FREQ;
-    haudio->out_packet = (uint32_t)(((haudio->freq * 4 * 2) / 1000));
+    haudio->out_packet = (uint32_t)(((haudio->freq * 2 * 2) / 1000));
     haudio->buf_size = ((uint32_t)(haudio->out_packet * AUDIO_OUT_PACKET_NUM));
     /* Initialize the Audio output Hardware layer */
     haudio->vol = AUDIO_DEFAULT_VOLUME;
@@ -845,7 +845,7 @@ static uint8_t  USBD_AUDIO_EP0_RxReady (USBD_HandleTypeDef *pdev)
       haudio->control.cmd = 0;
       haudio->control.len = 0;
       haudio->freq = haudio->control.data[0] + ((uint32_t)haudio->control.data[1] << 8) + ((uint32_t)haudio->control.data[2] << 16);
-      haudio->out_packet = (uint32_t)(((haudio->freq * 4 * 2) / 1000));
+      haudio->out_packet = (uint32_t)(((haudio->freq * 2 * 2) / 1000));
       haudio->buf_size = ((uint32_t)(haudio->out_packet * AUDIO_OUT_PACKET_NUM));
 
 			((USBD_AUDIO_ItfTypeDef *)pdev->pUserData)->FreqCtl(haudio->freq);

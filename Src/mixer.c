@@ -18,9 +18,9 @@ extern SPDIFRX_HandleTypeDef hspdif;
 extern DMA_HandleTypeDef hdma_spdif_rx_dt;
 extern DMA_HandleTypeDef hdma_spdif_rx_cs;
 
-uint32_t * WIFI_Buffer;
-uint32_t * USB_Buffer;
-uint32_t * BT_Buffer;
+uint16_t * WIFI_Buffer;
+uint16_t * USB_Buffer;
+uint16_t * BT_Buffer;
 
 uint32_t USB_Size = 0;
 uint32_t BT_Size = 0;
@@ -86,19 +86,19 @@ void HAL_I2S_RxCpltCallback(I2S_HandleTypeDef *hi2s)
 
 void Mixer_AppendUSBBuffer(uint8_t * data, uint32_t size)
 {
-	USB_Buffer = (uint32_t *)data;
-	USB_Size = size / 4;
+	USB_Buffer = (uint16_t *)data;
+	USB_Size = size / 2;
 }
 
-void Mixer_AppendBTBuffer(uint32_t * data, uint32_t size)
+void Mixer_AppendBTBuffer(uint16_t * data, uint32_t size)
 {
-	BT_Buffer = (uint32_t *)data;
+	BT_Buffer = (uint16_t *)data;
 	BT_Size = size;
 }
 
-void Mixer_AppendWIFIBuffer(uint32_t * data, uint32_t size)
+void Mixer_AppendWIFIBuffer(uint16_t * data, uint32_t size)
 {
-	WIFI_Buffer = (uint32_t *)data;
+	WIFI_Buffer = (uint16_t *)data;
 	WIFI_Size = size;
 }
 

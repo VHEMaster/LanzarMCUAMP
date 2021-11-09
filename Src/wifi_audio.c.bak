@@ -25,7 +25,7 @@ uint32_t MP3DECODEERRORS = 0;
 uint32_t MP3SUCCESS = 0;
 
 #define WIFI_SIZE (2304*2)
-static uint16_t WIFI_Buffer[WIFI_SIZE];
+static uint32_t WIFI_Buffer[WIFI_SIZE];
 /*
 extern RCC_PeriphCLKInitTypeDef PeriphClkInitStruct;
 void FreqUp(void)
@@ -239,7 +239,7 @@ void StartMP3Task(void const * argument)
 			samplebuffer = &SampleBuffer[2304];
 			syncword = MP3Decode(MP3, &tempbuffer, (int*)&left, samplebuffer, 0);
 			for(i = 2304; i < 2304*2; i++)
-				WIFI_Buffer[i] = SampleBuffer[i];
+				WIFI_Buffer[i] = SampleBuffer[i] << 16;
 			SCB_CleanDCache_by_Addr((uint32_t*)((uint32_t)WIFI_Buffer - ((uint32_t)WIFI_Buffer%32)), sizeof(WIFI_Buffer) + ((uint32_t)WIFI_Buffer%32 > 0 ? 32 : 0));
 			dacstep &= ~10;
 		}
