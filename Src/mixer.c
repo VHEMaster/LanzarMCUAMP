@@ -9,7 +9,6 @@
 
 extern I2S_HandleTypeDef hi2s1;
 extern I2S_HandleTypeDef hi2s2;
-extern I2S_HandleTypeDef hi2s3;
 
 extern SAI_HandleTypeDef hsai_BlockA1;
 extern SAI_HandleTypeDef hsai_BlockA2;
@@ -71,17 +70,6 @@ void HAL_SAI_RxCpltCallback(SAI_HandleTypeDef *hsai)
 void HAL_SAI_RxHalfCpltCallback(SAI_HandleTypeDef *hsai)
 {
 		BTAUDIO_RX_HalfTransfer_CallBack();
-}
-
-void HAL_I2S_RxHalfCpltCallback(I2S_HandleTypeDef *hi2s)
-{
-	if(hi2s == &hi2s3)
-		BTAUDIO_RX_HalfTransfer_CallBack();
-}
-void HAL_I2S_RxCpltCallback(I2S_HandleTypeDef *hi2s)
-{
-	if(hi2s == &hi2s3)
-		BTAUDIO_RX_TransferComplete_CallBack();
 }
 
 void Mixer_AppendUSBBuffer(uint8_t * data, uint32_t size)
@@ -223,14 +211,14 @@ void Mixer_TimerCallback(void)
 			else if(Mode == MODE_WIFI)
 			{
 				if(WIFI_Buffer == NULL) return;
-				__HAL_RCC_PLLI2S_CONFIG(316 , RCC_PLLP_DIV2, 2, 7);
+				__HAL_RCC_PLLI2S_CONFIG(343 , RCC_PLLP_DIV2, 2, 7);
 				HAL_I2S_Transmit_DMA(&hi2s1,(uint16_t*)WIFI_Buffer, WIFI_Size);
 				HAL_I2S_Transmit_DMA(&hi2s2,(uint16_t*)WIFI_Buffer, WIFI_Size);
 			}
 			else if(Mode == MODE_BT)
 			{
 				if(BT_Buffer == NULL) return;
-				__HAL_RCC_PLLI2S_CONFIG(316 , RCC_PLLP_DIV2, 2, 7);
+				__HAL_RCC_PLLI2S_CONFIG(343 , RCC_PLLP_DIV2, 2, 7);
 				HAL_I2S_Transmit_DMA(&hi2s1,(uint16_t*)BT_Buffer, BT_Size);
 				HAL_I2S_Transmit_DMA(&hi2s2,(uint16_t*)BT_Buffer, BT_Size);
 			}
@@ -290,6 +278,7 @@ void Mixer_SyncBT(void)
 {
 	BT_PrevTick = HAL_GetTick64();
 }
+
 void Mixer_SyncWIFI(void)
 {
 	WIFI_PrevTick = HAL_GetTick64();

@@ -24,7 +24,6 @@ I2C_HandleTypeDef hi2c2;
 
 I2S_HandleTypeDef hi2s1;
 I2S_HandleTypeDef hi2s2;
-I2S_HandleTypeDef hi2s3;
 DMA_HandleTypeDef hdma_adc1;
 DMA_HandleTypeDef hdma_spi1_tx;
 DMA_HandleTypeDef hdma_spi2_tx;
@@ -155,7 +154,6 @@ void StartWatchdogTask(void const * argument);
 
 void MX_I2S1_Init(void);
 void MX_I2S2_Init(void);
-void MX_I2S3_Init(void);
 
 
 void StartWatchdogTask(void const * argument)
@@ -172,7 +170,13 @@ void StartWatchdogTask(void const * argument)
 extern void HalfTransfer_CallBack_FS(void);
 extern void TransferComplete_CallBack_FS(void);
 
-
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	if(GPIO_Pin == GPIO_PIN_15)
+	{
+		BTAUDIO_CK_Callback();
+	}
+}
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
@@ -275,7 +279,6 @@ int main(void)
   MX_RNG_Init();
   MX_I2S1_Init();
   MX_I2S2_Init();
-  MX_I2S3_Init();
   MX_UART7_Init();
   MX_SPDIFRX_Init();
   MX_TIM4_Init();
@@ -722,39 +725,6 @@ void MX_I2S2_Init(void)
   /* USER CODE BEGIN I2S2_Init 2 */
 
   /* USER CODE END I2S2_Init 2 */
-
-}
-
-/**
-  * @brief I2S3 Initialization Function
-  * @param None
-  * @retval None
-  */
-void MX_I2S3_Init(void)
-{
-
-  /* USER CODE BEGIN I2S3_Init 0 */
-
-  /* USER CODE END I2S3_Init 0 */
-
-  /* USER CODE BEGIN I2S3_Init 1 */
-
-  /* USER CODE END I2S3_Init 1 */
-  hi2s3.Instance = SPI3;
-  hi2s3.Init.Mode = I2S_MODE_SLAVE_RX;
-  hi2s3.Init.Standard = I2S_STANDARD_PHILIPS;
-  hi2s3.Init.DataFormat = I2S_DATAFORMAT_16B_EXTENDED;
-  hi2s3.Init.MCLKOutput = I2S_MCLKOUTPUT_DISABLE;
-  hi2s3.Init.AudioFreq = I2S_AUDIOFREQ_44K;
-  hi2s3.Init.CPOL = I2S_CPOL_LOW;
-  hi2s3.Init.ClockSource = I2S_CLOCK_PLL;
-  if (HAL_I2S_Init(&hi2s3) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN I2S3_Init 2 */
-
-  /* USER CODE END I2S3_Init 2 */
 
 }
 
@@ -1308,6 +1278,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(BUZZER_GPIO_Port, &GPIO_InitStruct);
 
+	GPIO_InitStruct.Pin = GPIO_PIN_15;
+	GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+	
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 }
 
 
